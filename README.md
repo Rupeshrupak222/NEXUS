@@ -57,17 +57,6 @@ Plot/
 
 ---
 
-## 🔑 Pre-Seeded Evaluation Credentials
-
-You can test the platform either via **1-Click Demo Evaluation Sign In** on the login page or using the following credentials:
-
-| Role | Name | Email / ID | Password | Access / Scope |
-| :--- | :--- | :--- | :--- | :--- |
-| **Admin** | Dr. Alexander Wright | `admin@academy.io` | `AdminPassword@2026` | Full Academy Management Portal |
-| **Student** | Rahul Sharma | `rahul@example.com` or `STU-2026-001` | `StudentPass@2026` | Enrolled in Full Stack & Data Science |
-| **Student** | Priya Patel | `priya@example.com` or `STU-2026-002` | `StudentPass@2026` | Graduated with Verified Certificate |
-| **Student** | Marcus Vance | `marcus@example.com` or `STU-2026-003` | *(Pending Activation)* | Token in Outbox for Activation Testing |
-
 ---
 
 ## 🚀 Getting Started
