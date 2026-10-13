@@ -173,7 +173,7 @@ export function StudentCoursePlayerPage() {
               {currentLesson.type === 'VIDEO' ? (
                 currentLesson.video_url ? (
                   <div style={{ position: 'relative', paddingTop: '56.25%', backgroundColor: '#0F172A' }}>
-                    {/\.(mp4|webm|ogg)(\?.*)?$/i.test(currentLesson.video_url) ? (
+                    {/\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(currentLesson.video_url) ? (
                       <video
                         src={currentLesson.video_url}
                         title={currentLesson.title}

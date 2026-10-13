@@ -67,6 +67,43 @@ class ApiClient {
     return this.request(endpoint, { method: 'POST', body });
   }
 
+  // Upload a file via multipart/form-data. Does NOT set Content-Type so the
+  // browser can attach the correct multipart boundary. `file` is a File object.
+  async upload(endpoint, file, fieldName = 'file') {
+    const formData = new FormData();
+    formData.append(fieldName, file);
+
+    const headers = {};
+    if (this.token) {
+      headers['Authorization'] = `Bearer ${this.token}`;
+    }
+
+    const response = await fetch(`${API_BASE}${endpoint}`, {
+      method: 'POST',
+      body: formData,
+      headers,
+      credentials: 'include'
+    });
+
+    let data;
+    try {
+      data = await response.json();
+    } catch {
+      data = { success: false, message: 'Invalid response from server' };
+    }
+
+    if (!response.ok) {
+      throw {
+        status: response.status,
+        message: data.message || 'Upload failed',
+        code: data.code || 'UPLOAD_ERROR',
+        data
+      };
+    }
+
+    return data;
+  }
+
   patch(endpoint, body = {}) {
     return this.request(endpoint, { method: 'PATCH', body });
   }

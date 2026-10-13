@@ -9,6 +9,7 @@ import { fileURLToPath } from 'url';
 import { config } from './config/index.js';
 import { initializeSchema } from './database/schema.js';
 import { seedDatabase } from './database/seed.js';
+import { UPLOADS_DIR } from './middleware/uploadMiddleware.js';
 
 import authRoutes from './routes/authRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
@@ -77,6 +78,18 @@ app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/student', studentRoutes);
 app.use('/api/verify-certificate', verificationRoutes);
+
+// 6b. Serve uploaded course materials (videos / PDFs) statically
+app.use(
+  '/uploads',
+  express.static(UPLOADS_DIR, {
+    maxAge: '7d',
+    setHeaders: (res) => {
+      // Allow the frontend (different dev origin) to embed/stream these files.
+      res.setHeader('Access-Control-Allow-Origin', '*');
+    }
+  })
+);
 
 // 7. Serve Static Frontend in Production / Built mode
 const clientDistPath = path.resolve(__dirname, '../frontend/dist');

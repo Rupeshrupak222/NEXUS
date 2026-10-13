@@ -2,11 +2,25 @@ import express from 'express';
 import { adminController } from '../controllers/adminController.js';
 import { authenticate } from '../middleware/authMiddleware.js';
 import { requireAdmin } from '../middleware/rbacMiddleware.js';
+import { uploadLessonMaterial } from '../middleware/uploadMiddleware.js';
 
 const router = express.Router();
 
 // Apply auth and admin RBAC checks across all admin endpoints
 router.use(authenticate, requireAdmin);
+
+// Wrap multer so its errors surface as clean 400s via the central error handler.
+function handleUpload(req, res, next) {
+  uploadLessonMaterial(req, res, (err) => {
+    if (err) {
+      if (err.code === 'LIMIT_FILE_SIZE') {
+        return next({ status: 400, code: 'FILE_TOO_LARGE', message: 'File exceeds the 500MB upload limit.' });
+      }
+      return next({ status: err.status || 400, code: err.code || 'UPLOAD_FAILED', message: err.message });
+    }
+    next();
+  });
+}
 
 // Dashboard
 router.get('/dashboard', adminController.getDashboard);
@@ -29,6 +43,9 @@ router.post('/courses/:id/modules', adminController.addModule);
 router.delete('/courses/:id/modules/:moduleId', adminController.deleteModule);
 router.post('/courses/:id/modules/:moduleId/lessons', adminController.addLesson);
 router.delete('/courses/:id/lessons/:lessonId', adminController.deleteLesson);
+
+// Upload lesson material (video / PDF) → returns served URL
+router.post('/uploads/material', handleUpload, adminController.uploadMaterial);
 
 // Batches
 router.get('/batches', adminController.getBatches);

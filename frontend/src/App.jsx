@@ -16,6 +16,7 @@ import { AdminDashboardPage } from './features/admin/AdminDashboardPage';
 import { AdminStudentsPage } from './features/admin/AdminStudentsPage';
 import { AdminStudentDetailPage } from './features/admin/AdminStudentDetailPage';
 import { AdminCoursesPage } from './features/admin/AdminCoursesPage';
+import { AdminCourseDetailPage } from './features/admin/AdminCourseDetailPage';
 import { AdminBatchesPage } from './features/admin/AdminBatchesPage';
 import { AdminSessionsPage } from './features/admin/AdminSessionsPage';
 import { AdminCertificatesPage } from './features/admin/AdminCertificatesPage';
@@ -72,6 +73,7 @@ export default function App() {
               <Route path="students" element={<AdminStudentsPage />} />
               <Route path="students/:id" element={<AdminStudentDetailPage />} />
               <Route path="courses" element={<AdminCoursesPage />} />
+              <Route path="courses/:id" element={<AdminCourseDetailPage />} />
               <Route path="batches" element={<AdminBatchesPage />} />
               <Route path="sessions" element={<AdminSessionsPage />} />
               <Route path="certificates" element={<AdminCertificatesPage />} />

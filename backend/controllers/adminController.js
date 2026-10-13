@@ -362,6 +362,41 @@ export const adminController = {
     }
   },
 
+  // Upload a lesson material (video / PDF) and return its served URL.
+  async uploadMaterial(req, res, next) {
+    try {
+      if (!req.file) {
+        throw { status: 400, message: 'No file received. Attach a video or PDF under the "file" field.' };
+      }
+
+      const url = `/uploads/${req.file.filename}`;
+      const kind = req.file.mimetype === 'application/pdf' ? 'PDF' : 'VIDEO';
+
+      await auditService.log({
+        req,
+        action: 'MATERIAL_UPLOADED',
+        resourceType: 'LESSON_MATERIAL',
+        resourceId: req.file.filename,
+        details: { originalName: req.file.originalname, size: req.file.size, kind },
+        actorUser: req.user
+      });
+
+      res.status(201).json({
+        success: true,
+        data: {
+          url,
+          kind,
+          fileName: req.file.filename,
+          originalName: req.file.originalname,
+          size: req.file.size,
+          mimeType: req.file.mimetype
+        }
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+
   // 4. Batches
   async getBatches(req, res, next) {
     try {
